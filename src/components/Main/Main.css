@@ -1,0 +1,10 @@
+main {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-auto-rows: minmax(400px, auto);
+}
+
+main > * {
+  background-color: lightblue;
+  border: 1px solid black;
+}
