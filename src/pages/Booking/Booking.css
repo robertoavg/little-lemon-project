@@ -1,0 +1,8 @@
+.booking {
+  padding: 3rem 0;
+}
+
+.booking__inner {
+  display: grid;
+  gap: 1rem;
+}

@@ -1,13 +1,16 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "../../pages/Home/Home";
+import Booking from "../../pages/Booking/Booking";
 import "./Main.css";
 
 const Main = () => {
   return (
     <main>
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-      <div>4</div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/booking" element={<Booking />} />
+      </Routes>
     </main>
   );
 };

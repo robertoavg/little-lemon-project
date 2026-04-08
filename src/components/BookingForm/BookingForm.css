@@ -1,0 +1,33 @@
+.booking__form {
+  border-radius: var(--radius);
+  background: var(--highlight-light);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  min-height: 500px;
+}
+
+.booking__form label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.booking__form input,
+.booking__form select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--highlight);
+  margin-bottom: 1rem;
+}
+
+.booking__form button {
+  background: var(--primary-yellow);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  justify-self: end;
+}
