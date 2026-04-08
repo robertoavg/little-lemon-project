@@ -1,12 +1,12 @@
 import { BookingForm } from "../../components/BookingForm/BookingForm";
 import "./Booking.css";
 
-export default function Booking() {
+export default function Booking({ availableTimes, dispatch }) {
   return (
     <section className="booking">
       <div className="container booking__inner">
         <h1>Reserve a table</h1>
-        <BookingForm />
+        <BookingForm availableTimes={availableTimes} dispatch={dispatch} />
       </div>
     </section>
   );

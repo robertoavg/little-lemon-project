@@ -1,27 +1,24 @@
 import React, { useState } from "react";
 import "./BookingForm.css";
 
-export const BookingForm = () => {
+export const BookingForm = ({ availableTimes, dispatch }) => {
   const today = new Date();
   const todayLocale = today.toLocaleDateString("en-CA");
   const hour = today.getHours().toFixed(2).slice(0, 2) + ":00";
-  const [date, setDate] = useState(today);
+  const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [guests, setGuests] = useState(1);
   const [occasion, setOccasion] = useState("");
 
-  const allowedTimes = [
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-    "21:00",
-    "22:00",
-  ];
+  const handleDateChange = (e) => {
+    const selectedDate = e.target.value;
+    setDate(selectedDate);
+
+    dispatch({
+      type: "UPDATE_TIMES",
+      date: selectedDate,
+    });
+  };
 
   const handleSubmit = () => {
     console.log(date === todayLocale);
@@ -36,7 +33,7 @@ export const BookingForm = () => {
     }
     if (
       date === todayLocale &&
-      (time <= hour || !allowedTimes.includes(time))
+      (time <= hour || !availableTimes.includes(time))
     ) {
       alert("Please select a valid time.");
       return;
@@ -63,17 +60,17 @@ Occasion: ${occasion}`);
         id="res-date"
         value={date}
         onClick={(e) => e.currentTarget.showPicker()}
-        onChange={(e) => setDate(e.target.value)}
+        onChange={(e) => handleDateChange(e)}
         required
       />
       <label htmlFor="res-time">Choose time</label>
-      <select value={time} onChange={(e) => setTime(e.target.value)} required>
+      <select id="res-time" value={time} onChange={(e) => setTime(e.target.value)} required>
         <option value="">Select a time</option>
-        {allowedTimes.map((timeOption) => (
+        {availableTimes.map((timeOption) => (
           <option
             key={timeOption}
             value={timeOption}
-            disabled={timeOption < hour || timeOption === hour}
+            disabled={date && date === todayLocale && (timeOption < hour || timeOption === hour)}
           >
             {timeOption}
           </option>
