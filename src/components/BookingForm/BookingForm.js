@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./BookingForm.css";
 
-export const BookingForm = ({ availableTimes, dispatch }) => {
+export const BookingForm = ({ availableTimes, dispatch, submitForm }) => {
   const today = new Date();
   const todayLocale = today.toLocaleDateString("en-CA");
   const hour = today.getHours().toFixed(2).slice(0, 2) + ":00";
@@ -13,47 +13,35 @@ export const BookingForm = ({ availableTimes, dispatch }) => {
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
     setDate(selectedDate);
-
+    console.log("Selected date:", selectedDate);
+    const newSelectedDate = new Date(selectedDate);
+    console.log("New selected date object:", newSelectedDate);
     dispatch({
       type: "UPDATE_TIMES",
-      date: selectedDate,
+      date: newSelectedDate,
     });
   };
 
-  const handleSubmit = () => {
-    console.log(date === todayLocale);
-    console.log(date);
-    console.log(todayLocale);
-    console.log(time);
-    console.log(hour);
-    console.log(time <= hour);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
     if (!date || !time || !guests || !occasion) {
       alert("Please fill in all fields before submitting.");
       return;
     }
+
     if (
       date === todayLocale &&
       (time <= hour || !availableTimes.includes(time))
     ) {
       alert("Please select a valid time.");
       return;
-    } else {
-      alert(`Booking Details:
-Date: ${date}
-Time: ${time}
-Guests: ${guests}
-Occasion: ${occasion}`);
     }
+    submitForm({ date, time, guests, occasion });
   };
 
   return (
-    <form
-      className="booking__form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-    >
+    <form className="booking__form" onSubmit={handleSubmit}>
       <label htmlFor="res-date">Choose date</label>
       <input
         type="date"
@@ -61,16 +49,26 @@ Occasion: ${occasion}`);
         value={date}
         onClick={(e) => e.currentTarget.showPicker()}
         onChange={(e) => handleDateChange(e)}
+        min={todayLocale}
         required
       />
       <label htmlFor="res-time">Choose time</label>
-      <select id="res-time" value={time} onChange={(e) => setTime(e.target.value)} required>
+      <select
+        id="res-time"
+        value={time}
+        onChange={(e) => setTime(e.target.value)}
+        required
+      >
         <option value="">Select a time</option>
         {availableTimes.map((timeOption) => (
           <option
             key={timeOption}
             value={timeOption}
-            disabled={date && date === todayLocale && (timeOption < hour || timeOption === hour)}
+            disabled={
+              date &&
+              date === todayLocale &&
+              (timeOption < hour || timeOption === hour)
+            }
           >
             {timeOption}
           </option>

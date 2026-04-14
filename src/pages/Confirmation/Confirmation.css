@@ -1,0 +1,25 @@
+.confirmation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: center;
+}
+
+.confirmation .separator {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid black;
+}
+
+.confirmation .details {
+    align-self: start;
+}
+.confirmation .details p {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+}
+
+.confirmation .details p:last-child {
+    margin-top: 2rem;
+    font-weight: bold;
+}

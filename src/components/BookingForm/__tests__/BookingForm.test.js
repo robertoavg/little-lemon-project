@@ -1,6 +1,6 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BookingForm } from "../BookingForm";
+import { submitAPI } from "../../../api/api";
 
 describe("BookingForm", () => {
   const availableTimes = ["13:00", "14:00", "15:00", "18:00"];
@@ -18,18 +18,32 @@ describe("BookingForm", () => {
   });
 
   it("should render booking form fields", () => {
-    render(<BookingForm availableTimes={availableTimes} dispatch={jest.fn()} />);
+    render(
+      <BookingForm
+        availableTimes={availableTimes}
+        dispatch={jest.fn()}
+        submitForm={jest.fn()}
+      />,
+    );
 
     expect(screen.getByLabelText(/choose date/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/choose time/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/number of guests/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/occasion/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /make your reservation/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /make your reservation/i }),
+    ).toBeInTheDocument();
   });
 
   it("should dispatch update times when date changes", () => {
     const dispatchMock = jest.fn();
-    render(<BookingForm availableTimes={availableTimes} dispatch={dispatchMock} />);
+    render(
+      <BookingForm
+        availableTimes={availableTimes}
+        dispatch={dispatchMock}
+        submitForm={jest.fn()}
+      />,
+    );
 
     fireEvent.change(screen.getByLabelText(/choose date/i), {
       target: { value: "2026-04-07" },
@@ -37,20 +51,36 @@ describe("BookingForm", () => {
 
     expect(dispatchMock).toHaveBeenCalledWith({
       type: "UPDATE_TIMES",
-      date: "2026-04-07",
+      date: new Date("2026-04-07"),
     });
   });
 
   it("should show validation alert when submitting with missing fields", () => {
-    render(<BookingForm availableTimes={availableTimes} dispatch={jest.fn()} />);
+    render(
+      <BookingForm
+        availableTimes={availableTimes}
+        dispatch={jest.fn()}
+        submitForm={jest.fn()}
+      />,
+    );
 
-    fireEvent.click(screen.getByRole("button", { name: /make your reservation/i }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /make your reservation/i }),
+    );
 
-    expect(alertSpy).toHaveBeenCalledWith("Please fill in all fields before submitting.");
+    expect(alertSpy).toHaveBeenCalledWith(
+      "Please fill in all fields before submitting.",
+    );
   });
 
   it("should disable past and current time options for today", () => {
-    render(<BookingForm availableTimes={availableTimes} dispatch={jest.fn()} />);
+    render(
+      <BookingForm
+        availableTimes={availableTimes}
+        dispatch={jest.fn()}
+        submitForm={jest.fn()}
+      />,
+    );
 
     fireEvent.change(screen.getByLabelText(/choose date/i), {
       target: { value: "2026-04-07" },
@@ -68,7 +98,13 @@ describe("BookingForm", () => {
   });
 
   it("should show invalid time alert when selecting today and time is not valid", () => {
-    render(<BookingForm availableTimes={availableTimes} dispatch={jest.fn()} />);
+    render(
+      <BookingForm
+        availableTimes={availableTimes}
+        dispatch={jest.fn()}
+        submitForm={jest.fn()}
+      />,
+    );
 
     fireEvent.change(screen.getByLabelText(/choose date/i), {
       target: { value: "2026-04-07" },
@@ -80,13 +116,22 @@ describe("BookingForm", () => {
       target: { value: "birthday" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /make your reservation/i }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /make your reservation/i }),
+    );
 
     expect(alertSpy).toHaveBeenCalledWith("Please select a valid time.");
   });
 
-  it("should show booking details alert on successful submission", () => {
-    render(<BookingForm availableTimes={availableTimes} dispatch={jest.fn()} />);
+  it("should call submitAPI on successful submission", () => {
+    const submitAPI_mock = jest.fn().mockResolvedValue(true);
+    render(
+      <BookingForm
+        availableTimes={availableTimes}
+        dispatch={jest.fn()}
+        submitForm={submitAPI_mock}
+      />,
+    );
 
     fireEvent.change(screen.getByLabelText(/choose date/i), {
       target: { value: "2026-04-08" },
@@ -101,10 +146,15 @@ describe("BookingForm", () => {
       target: { value: "anniversary" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /make your reservation/i }));
-
-    expect(alertSpy).toHaveBeenCalledWith(
-      "Booking Details:\nDate: 2026-04-08\nTime: 15:00\nGuests: 4\nOccasion: anniversary"
+    fireEvent.click(
+      screen.getByRole("button", { name: /make your reservation/i }),
     );
+
+    expect(submitAPI_mock).toHaveBeenCalledWith({
+      date: "2026-04-08",
+      time: "15:00",
+      guests: 4,
+      occasion: "anniversary",
+    });
   });
 });

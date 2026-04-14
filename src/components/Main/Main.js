@@ -1,30 +1,51 @@
-import React, { useReducer } from "react";
-import { Routes, Route } from "react-router-dom";
+import { useReducer, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "../../pages/Home/Home";
 import Booking from "../../pages/Booking/Booking";
+import Confirmation from "../../pages/Confirmation/Confirmation";
+import { fetchAPI, submitAPI } from "../../api/api";
+
 import "./Main.css";
 
-const seededTimes = ["17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
-
 export function initializeTimes() {
+  const today = new Date();
+  const seededTimes = fetchAPI(today);
   return seededTimes;
 }
 
 export function updateTimes(state, action) {
+  console.log("Reducer called with action:", action);
   switch (action.type) {
     case "UPDATE_TIMES":
-      return seededTimes;
+      return fetchAPI(action.date);
     default:
       return state;
   }
 }
 
 const Main = () => {
+  const navigate = useNavigate();
+  const [confirmationData, setConfirmationData] = useState({
+    date: "",
+    time: "",
+    guests: "",
+    occasion: "",
+  });
   const [availableTimes, dispatch] = useReducer(
     updateTimes,
     [],
     initializeTimes,
   );
+  console.log("Available times in Main component:", availableTimes);
+
+  const submitForm = (formData) => {
+    const { date, time, guests, occasion } = formData;
+    const success = submitAPI(formData);
+    if (success) {
+      setConfirmationData({ date, time, guests, occasion });
+      navigate("/confirmed");
+    }
+  };
 
   return (
     <main>
@@ -33,8 +54,16 @@ const Main = () => {
         <Route
           path="/booking"
           element={
-            <Booking availableTimes={availableTimes} dispatch={dispatch} />
+            <Booking
+              availableTimes={availableTimes}
+              dispatch={dispatch}
+              submitForm={submitForm}
+            />
           }
+        />
+        <Route
+          path="/confirmed"
+          element={<Confirmation data={confirmationData} />}
         />
       </Routes>
     </main>
