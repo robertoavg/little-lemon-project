@@ -1,70 +1,229 @@
-# Getting Started with Create React App
+## Little Lemon Booking App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based table reservation application for the fictional **Little Lemon** restaurant.
+
+This project was built as part of the Meta Front-End Developer coursework and focuses on React fundamentals, routing, state management, accessibility, and testing.
+
+---
+
+## Features
+- Table reservation form
+
+- Dynamic available booking times
+
+- Date-based time updates
+
+- Form validation using native HTML validation
+
+- Confirmation page after successful booking
+
+- React Router navigation
+
+- Reducer-based state management
+
+- Responsive layout
+
+- Unit and integration testing with Jest and React Testing Library
+
+---
+
+## Tech Stack
+
+- React
+
+- React Router
+
+- JavaScript
+
+- CSS
+
+- Jest
+
+- React Testing Library
+
+- Create React App
+
+
+---
+
+  
+
+## Project Structure
+
+  
+
+```txt
+
+src/
+
+│
+
+├── api/
+
+│ └── api.js
+
+│
+
+├── components/
+
+│ ├── BookingForm/
+
+│ ├── Main/
+
+│ └── ...
+
+│
+
+├── pages/
+
+│ ├── Home/
+
+│ ├── Booking/
+
+│ └── Confirmation/
+
+│
+
+├── App.js
+
+└── index.js
+
+  
+```
+
+---
+
+  
+
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### Install dependencies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Start development server
 
-### `npm test`
+```bash
+npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the app in development mode.
 
-### `npm run build`
+Open:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```txt
+http://localhost:3000
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Run tests
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm test
+```
 
-### `npm run eject`
+Launches the Jest test runner in interactive watch mode.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Create production build
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Builds the app for production in the `build` folder.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## Booking Flow
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. User selects a date
+2. Available times are fetched dynamically
+3. User completes reservation details
+4. Form validation is performed
+5. Reservation is submitted
+6. User is redirected to the confirmation page
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## State Management
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The project uses `useReducer` for handling available booking times.
 
-### Analyzing the Bundle Size
+Example:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```js
+export function initializeTimes() {
+  const today = new Date();
+  return fetchAPI(today);
+}
 
-### Making a Progressive Web App
+export function updateTimes(state, action) {
+  switch (action.type) {
+    case "UPDATE_TIMES":
+      return fetchAPI(new Date(action.payload));
+    default:
+      return state;
+  }
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## Testing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The application includes tests for:
 
-### Deployment
+- Component rendering
+- Form validation
+- User interactions
+- Reducer behavior
+- Booking submission flow
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Testing libraries used:
 
-### `npm run build` fails to minify
+- Jest
+- React Testing Library
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Example:
+
+```js
+expect(screen.getByLabelText(/date/i)).toBeRequired();
+```
+
+---
+
+## Accessibility
+
+The project includes accessibility best practices such as:
+
+- Semantic HTML
+- Associated labels for form controls
+- Native form validation
+- Keyboard-accessible interactions
+
+---
+
+## Learning Objectives
+
+This project was used to practice:
+
+- React component architecture
+- State lifting
+- Reducers
+- Routing
+- Controlled forms
+- Testing strategies
+- Accessibility
+- Front-end project organization
+
+---
+
+## Author
+
+Roberto Villanueva
+
+Software Developer focused on React, TypeScript, testing, and modern frontend development.
