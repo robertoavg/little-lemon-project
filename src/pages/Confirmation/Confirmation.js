@@ -1,6 +1,15 @@
+import { useEffect } from "react";
 import "./Confirmation.css";
 
 export const Confirmation = (props) => {
+  useEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo(0, 0);
+    };
+
+    scrollToTop();
+  }, []);
+
   return (
     <section className="confirmation">
       <h1>Booking confirmed</h1>
