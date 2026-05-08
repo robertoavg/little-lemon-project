@@ -4,7 +4,6 @@
   padding: 2rem;
   box-shadow: var(--shadow);
   display: grid;
-  place-items: center;
   font-weight: 800;
   min-height: 500px;
 }

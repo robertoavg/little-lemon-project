@@ -1,8 +1,10 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import "./Nav.css";
-import logo from "../../logo.svg"; // replace later with Little Lemon logo if you have it
+import logo from "../../logo.svg";
 
 export default function Nav() {
+  const location = useLocation();
+
   return (
     <header className="nav">
       <div className="container nav__inner">
@@ -20,6 +22,16 @@ export default function Nav() {
           >
             Home
           </NavLink>
+          {location.pathname === "/" && (
+            <>
+              <a className="nav__link" href="#specials">
+                Menu
+              </a>
+              <a className="nav__link" href="#about">
+                About
+              </a>
+            </>
+          )}
           <NavLink
             to="/booking"
             className={({ isActive }) =>
@@ -28,14 +40,6 @@ export default function Nav() {
           >
             Reservations
           </NavLink>
-
-          {/* placeholders so your nav matches the course layout */}
-          <a className="nav__link" href="#specials">
-            Menu
-          </a>
-          <a className="nav__link" href="#about">
-            About
-          </a>
         </nav>
       </div>
     </header>

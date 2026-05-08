@@ -21,7 +21,7 @@ export default function CallToAction() {
         </div>
 
         <div className="hero__media" aria-hidden="true">
-          <img className="hero__image" src={food} alt="Chef salting fries"></img>
+          <img className="hero__image" src={food} alt="Chef salting fries" loading="eager"></img>
           <img className="hero__lemon" src={lemon} alt="Little Lemon logo"></img>
         </div>
       </div>

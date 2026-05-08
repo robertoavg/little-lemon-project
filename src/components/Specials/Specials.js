@@ -34,11 +34,7 @@ export default function Specials() {
       <div className="container">
         <div className="specials__header">
           <h2>This week’s specials!</h2>
-          <button className="btn" type="button">
-            Online Menu
-          </button>
         </div>
-
         <div className="specials__grid">
           {specials.map((item) => (
             <article key={item.id} className="card">

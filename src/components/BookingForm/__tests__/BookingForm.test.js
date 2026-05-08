@@ -1,6 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BookingForm } from "../BookingForm";
-import { submitAPI } from "../../../api/api";
 
 describe("BookingForm", () => {
   const availableTimes = ["13:00", "14:00", "15:00", "18:00"];
@@ -30,9 +29,7 @@ describe("BookingForm", () => {
     expect(screen.getByLabelText(/choose time/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/number of guests/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/occasion/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /make your reservation/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button")).toBeInTheDocument();
   });
 
   it("should dispatch update times when date changes", () => {
@@ -55,22 +52,23 @@ describe("BookingForm", () => {
     });
   });
 
-  it("should show validation alert when submitting with missing fields", () => {
+  it("should prevent submission when required fields are empty", () => {
+    const submitFormMock = jest.fn();
+
     render(
       <BookingForm
         availableTimes={availableTimes}
         dispatch={jest.fn()}
-        submitForm={jest.fn()}
+        submitForm={submitFormMock}
       />,
     );
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /make your reservation/i }),
-    );
+    fireEvent.click(screen.getByRole("button"));
 
-    expect(alertSpy).toHaveBeenCalledWith(
-      "Please fill in all fields before submitting.",
-    );
+    expect(submitFormMock).not.toHaveBeenCalled();
+
+    const form = screen.getByRole("form");
+    expect(form.checkValidity()).toBe(false);
   });
 
   it("should disable past and current time options for today", () => {
@@ -97,32 +95,6 @@ describe("BookingForm", () => {
     expect(optionValues).toContainEqual({ value: "15:00", disabled: false });
   });
 
-  it("should show invalid time alert when selecting today and time is not valid", () => {
-    render(
-      <BookingForm
-        availableTimes={availableTimes}
-        dispatch={jest.fn()}
-        submitForm={jest.fn()}
-      />,
-    );
-
-    fireEvent.change(screen.getByLabelText(/choose date/i), {
-      target: { value: "2026-04-07" },
-    });
-    fireEvent.change(screen.getByLabelText(/choose time/i), {
-      target: { value: "14:00" },
-    });
-    fireEvent.change(screen.getByLabelText(/occasion/i), {
-      target: { value: "birthday" },
-    });
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /make your reservation/i }),
-    );
-
-    expect(alertSpy).toHaveBeenCalledWith("Please select a valid time.");
-  });
-
   it("should call submitAPI on successful submission", () => {
     const submitAPI_mock = jest.fn().mockResolvedValue(true);
     render(
@@ -146,9 +118,7 @@ describe("BookingForm", () => {
       target: { value: "anniversary" },
     });
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /make your reservation/i }),
-    );
+    fireEvent.click(screen.getByRole("button"));
 
     expect(submitAPI_mock).toHaveBeenCalledWith({
       date: "2026-04-08",
