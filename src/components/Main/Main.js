@@ -14,7 +14,6 @@ export function initializeTimes() {
 }
 
 export function updateTimes(state, action) {
-  console.log("Reducer called with action:", action);
   switch (action.type) {
     case "UPDATE_TIMES":
       return fetchAPI(action.date);
@@ -36,7 +35,6 @@ const Main = () => {
     [],
     initializeTimes,
   );
-  console.log("Available times in Main component:", availableTimes);
 
   const submitForm = (formData) => {
     const { date, time, guests, occasion } = formData;

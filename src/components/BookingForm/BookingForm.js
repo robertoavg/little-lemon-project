@@ -14,9 +14,7 @@ export const BookingForm = ({ availableTimes, dispatch, submitForm }) => {
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
     setDate(selectedDate);
-    console.log("Selected date:", selectedDate);
     const newSelectedDate = new Date(selectedDate);
-    console.log("New selected date object:", newSelectedDate);
     dispatch({
       type: "UPDATE_TIMES",
       date: newSelectedDate,
@@ -26,7 +24,7 @@ export const BookingForm = ({ availableTimes, dispatch, submitForm }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    //we have validations but they won't show the message as the required fields will prevent the form from being submitted. We can remove the required attribute and use our own validation to show the error messages if needed.
+    //we have validations but some of them won't show the message as the required fields will prevent the form from being submitted. We can remove the required attribute and use our own validation to show the error messages if neede, however using it this way enforces users to fill the details correctly.
     if (!date || !time || !guests || !occasion) {
       setError("Please fill in all fields before submitting.");
       return;
